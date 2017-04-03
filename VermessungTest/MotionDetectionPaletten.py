@@ -12,6 +12,7 @@ import VermessungTest4 as Vermessung  # mit Bindestrich im Name funktioniert es 
 import time
 import numpy as np
 import Ultraschall1 as Ultraschall
+import datenbank as db
 
 # definieren der Mindestgroesse der zu erkennenden Objekte
 min_area = 4000 #bei Auflösung (1296, 736)
@@ -203,10 +204,11 @@ try:
             print "messpunkte umgewandelt\n", messpunkteUmgewandelt
             print "maximale höhe: ", hoehe_max
             ultraschall = False
-
-        print "länge und breite des Objektes: ", Vermessung.KubaturErmitteln(original, messpunkteUmgewandelt)
-        print "höhe des objektes: ", hoehe_max
-
+        
+        l, b = Vermessung.KubaturErmitteln(original, messpunkteUmgewandelt)
+        
+        db.messung_eintragen(l, b, hoehe_max) # Die gemessenen Daten in die Datenbank eintragen
+        
         break
 
     print "finito"

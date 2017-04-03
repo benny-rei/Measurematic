@@ -281,7 +281,7 @@ def KubaturErmitteln(image, messpunkte):
     return laenge_MM, breite_MM  # gibt die drei Kubatur Daten zurück (länge, breite, höhe)
 
 
-def UmfangErmitteln(image):
+"""def UmfangErmitteln(image):
     drehwinkel = 0  # --< für Testzwäcke
     # image = Bild_Drehen(image, np.rad2deg(drehwinkel))
     kontur_max = Konturen(image)  # (?,1,2)
@@ -308,3 +308,4 @@ def UmfangErmitteln(image):
     # print "hoehe: " + str(hoehe_maximal) + " mm"
 
     return width, length  # gibt die zwei Flächen Daten zurück (länge, breite, höhe)
+    """
