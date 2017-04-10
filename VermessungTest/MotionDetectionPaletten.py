@@ -86,7 +86,7 @@ try:
             continue
 
         #Vermessung kalibrieren
-        showImage("first", frame, 0)
+        #showImage("first", frame, 0)
         #break
 
 
@@ -101,7 +101,7 @@ try:
         # wenn der erste frame nicht None ist, wird dieser neu initialisiert
         if firstFrame is None:
             firstFrame = gray
-            showImage("gray first", gray, 0)
+            #showImage("gray first", gray, 0)
             print "erster frame erkannt"
             continue
 
@@ -132,10 +132,10 @@ try:
         # dilate the thresholded frame to fill in holes, then find contours
         # on thresholded frame
         thresh = cv2.erode(thresh, None, iterations=1)
-        thresh = cv2.dilate(thresh, None, iterations=15)
+        #thresh = cv2.dilate(thresh, None, iterations=15)
         #edged = cv2.Canny(thresh, 100, 400)
 
-        showImage("Thresh", thresh, 0)
+        #showImage("Thresh", thresh, 0)
 
         konturen = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[1]
 
@@ -146,7 +146,7 @@ try:
         frame2 = frame.copy()
 
         cv2.drawContours(frame2, konturen, -1, (0, 0, 255), 5)
-        showImage("Konturen", frame2, 0)
+        #showImage("Konturen", frame2, 0)
 
         # die größte Kontur ermitteln und überprüfen ob sie groß genug ist.
         kontur_maximal = max(konturen, key=cv2.contourArea)
