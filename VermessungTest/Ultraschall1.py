@@ -1,4 +1,4 @@
-h# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 # Bibliotheken einbinden
 from __future__ import division

@@ -12,7 +12,7 @@ import VermessungTest4 as Vermessung  # mit Bindestrich im Name funktioniert es 
 import time
 import numpy as np
 import Ultraschall1 as Ultraschall
-import datenbank as db
+#import datenbank as db
 
 # definieren der Mindestgroesse der zu erkennenden Objekte
 min_area = 4000 #bei Auflösung (1296, 736)
@@ -20,11 +20,12 @@ max_area = 700000 #framerand
 # sonst rundet es auf 2560 = 32*80 --> sonst wird aufgerundet dann funktioniert die kamera nicht
 #resolution = (1296, 736)
 resolution = (1920, 1080)
+#resolution = (640,480)
 
 # # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
 camera.resolution = resolution
-camera.framerate = 40
+camera.framerate = 60
 rawCapture = PiRGBArray(camera, size=resolution)
 
 # allow the camera to warmup
@@ -86,7 +87,7 @@ try:
             continue
 
         #Vermessung kalibrieren
-        #showImage("first", frame, 0)
+        #showImage("new", frame, 0)
         #break
 
 
@@ -120,7 +121,7 @@ try:
         frameDelta = cv2.absdiff(firstFrame, gray)
         # thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
 
-        showImage("Frame Delta", frameDelta, 0)
+        #showImage("Frame Delta", frameDelta, 0)
 
         # (15 und 255 stehen für weiß/schwarz werte) 255 schwarz 0 weiss
         #thresh = cv2.threshold(frameDelta, 5, 255, cv2.THRESH_BINARY)[1]
@@ -131,7 +132,7 @@ try:
         #kernel = np.ones((7, 7), np.uint8)
         # dilate the thresholded frame to fill in holes, then find contours
         # on thresholded frame
-        thresh = cv2.erode(thresh, None, iterations=1)
+        #thresh = cv2.erode(thresh, None, iterations=1)
         #thresh = cv2.dilate(thresh, None, iterations=15)
         #edged = cv2.Canny(thresh, 100, 400)
 
@@ -187,6 +188,7 @@ try:
             continue
 
         drawKontur(frame, kontur_maximal, 0)
+        
 
         continue
 
@@ -207,7 +209,7 @@ try:
         
         l, b = Vermessung.KubaturErmitteln(original, messpunkteUmgewandelt)
         
-        db.messung_eintragen(l, b, hoehe_max) # Die gemessenen Daten in die Datenbank eintragen
+        #db.messung_eintragen(l, b, hoehe_max) # Die gemessenen Daten in die Datenbank eintragen
         
         break
 
