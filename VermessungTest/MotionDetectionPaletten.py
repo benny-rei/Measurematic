@@ -19,13 +19,14 @@ min_area = 4000 #bei Auflösung (1296, 736)
 max_area = 700000 #framerand
 # sonst rundet es auf 2560 = 32*80 --> sonst wird aufgerundet dann funktioniert die kamera nicht
 #resolution = (1296, 736)
-resolution = (1920, 1080)
+#resolution = (1920, 1088)
+resolution = (1296, 730) # sonst wird das Bild verkleinert
 #resolution = (640,480)
 
 # # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
 camera.resolution = resolution
-camera.framerate = 60
+camera.framerate = 40
 rawCapture = PiRGBArray(camera, size=resolution)
 
 # allow the camera to warmup
@@ -87,7 +88,7 @@ try:
             continue
 
         #Vermessung kalibrieren
-        #showImage("new", frame, 0)
+        showImage("new", frame, 0)
         #break
 
 
@@ -121,7 +122,7 @@ try:
         frameDelta = cv2.absdiff(firstFrame, gray)
         # thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
 
-        #showImage("Frame Delta", frameDelta, 0)
+        showImage("Frame Delta", frameDelta, 0)
 
         # (15 und 255 stehen für weiß/schwarz werte) 255 schwarz 0 weiss
         #thresh = cv2.threshold(frameDelta, 5, 255, cv2.THRESH_BINARY)[1]
