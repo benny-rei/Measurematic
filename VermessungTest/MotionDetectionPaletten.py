@@ -15,7 +15,7 @@ import Ultraschall1 as Ultraschall
 #import datenbank as db
 
 # definieren der Mindestgroesse der zu erkennenden Objekte
-min_area = 4000 #bei Auflösung (1296, 736)
+min_area = 13000 #bei Auflösung (1296, 736)
 max_area = 700000 #framerand
 # sonst rundet es auf 2560 = 32*80 --> sonst wird aufgerundet dann funktioniert die kamera nicht
 #resolution = (1296, 736)
@@ -88,7 +88,7 @@ try:
             continue
 
         #Vermessung kalibrieren
-        showImage("new", frame, 0)
+        #showImage("new", frame, 0)
         #break
 
 
@@ -103,7 +103,9 @@ try:
         # wenn der erste frame nicht None ist, wird dieser neu initialisiert
         if firstFrame is None:
             firstFrame = gray
-            #showImage("gray first", gray, 0)
+            showImage("gray first", gray, 0)
+            messpunkteUmgewandelt = [[100,100, 100], [100,100, 100], [100,100, 100], [100,100, 100]]
+            l, b = Vermessung.KubaturErmitteln(original, messpunkteUmgewandelt)
             print "erster frame erkannt"
             continue
 
@@ -122,7 +124,7 @@ try:
         frameDelta = cv2.absdiff(firstFrame, gray)
         # thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
 
-        showImage("Frame Delta", frameDelta, 0)
+        #showImage("Frame Delta", frameDelta, 0)
 
         # (15 und 255 stehen für weiß/schwarz werte) 255 schwarz 0 weiss
         #thresh = cv2.threshold(frameDelta, 5, 255, cv2.THRESH_BINARY)[1]
@@ -185,13 +187,11 @@ try:
         #abstand_frame_objekt = frame.shape[0] - max_hoehe[1][0][1]
         abstand_frame_objekt = frame.shape[0] - max_hoehe
         #print "frameshape: ", frame.shape[1], "max höhe: ", max(kontur_maximal[:, :, 1]), "diff= ",abstand_frame_objekt
-        if abstand_frame_objekt <= 5:
-            continue
+        #if abstand_frame_objekt <= 5:
+        #    continue
 
         drawKontur(frame, kontur_maximal, 0)
         
-
-        continue
 
         # test
         #showImage("original", original, 0)

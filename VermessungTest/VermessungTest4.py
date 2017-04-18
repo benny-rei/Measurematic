@@ -55,10 +55,11 @@ def Konturen(image):  # anzahl ... wie viele Konturen sollen behalten werden
     # threshold the image, then perform a series of erosions +
     # dilations to remove any small
     #  regions of noise
-    thresh = cv2.threshold(gray, 50, 255, cv2.THRESH_BINARY_INV)[1]
+    thresh = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY_INV)[1]
     #thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
-    #thresh = cv2.erode(thresh, None, iterations=3)
-    #thresh = cv2.dilate(thresh, None, iterations=1)
+    thresh = cv2.dilate(thresh, None, iterations=10)
+    thresh = cv2.erode(thresh, None, iterations=10)
+
 
     edged = cv2.Canny(thresh, 50, 400)
 
@@ -70,7 +71,7 @@ def Konturen(image):  # anzahl ... wie viele Konturen sollen behalten werden
 
     showImage("thresh", thresh, 0)
 
-    showImage("edged", edged, 0)
+    showImage("edged", edged, 0) 
 
     _, konturen, _ = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -185,23 +186,25 @@ def UltraschallMesspuntZuEckpunkt(eckpunkte, messpunkte, hoehe_min, image, kontu
     return np.array(messpunkte_passend)
 
 
-def BreiteInMM(breite_bild_PX, breite_bild_MM, breite_objekt_PX, hoehe_sensoren):
+def BreiteInMM(breite_bild_PX, breite_bild_MM, breite_objekt_PX, hoehe_sensoren, hoehe_objekt_durchschnitt):
     """
     breite_bild_PX ... horizontale Auflösung des Bildes in Pixel
     breite_bild_MM ... breite des Bildes im mm am Boden
     breite_objekt_PX ... Breite des Objektes in PX
     hoehe_sensoren ... Abstand vom Boden zu den Sensoren in mm
+    hoehe_objekt_durchschnitt ... beschreibt den Mittelwert der Höhen der beiden Messpunkte
     """
 
-    # die Breite die einem Pixel am Boden entspricht
+    # die Länge die einem Pixel am Boden entspricht
     pixel_breite_boden = float(breite_bild_MM) / float(breite_bild_PX)
-
+    print "pixel_breite_boden: ", pixel_breite_boden
     # passt die Pixelgröße der Höhe an
-    relative_pixelgroesse = (hoehe_sensoren - hoehe_sensoren) / hoehe_sensoren
-
+    relative_pixelgroesse = float(hoehe_sensoren) / (float(hoehe_sensoren) - float(hoehe_objekt_durchschnitt))
+    print "relative_pixelgroesse", relative_pixelgroesse
     breite_objekt_mm = breite_objekt_PX * pixel_breite_boden * relative_pixelgroesse
+    print "breite_objekt_mm", breite_objekt_mm
 
-    return breite_objekt_mm
+    return laenge_objekt_mm
 
 
 def LaengeInMM(laenge_bild_PX, laenge_bild_MM, laenge_objekt_PX, hoehe_sensoren, hoehe_objekt_durchschnitt):
