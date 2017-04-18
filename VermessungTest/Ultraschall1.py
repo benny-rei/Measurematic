@@ -23,6 +23,7 @@ Sensoren_Abstand_Boden = 322  # millimeter
 
 # Hoehe angeben ab der gemessen werden soll in Millimeter
 hoehe_minimal = 40  # mm
+hoehe_obergrenze = 100 # mm
 
 GPIO_trigger_echo = np.zeros((4, 2), dtype=int)  # dtype int, sonst gibts probleme mit dem initialisieren
 print GPIO_trigger_echo.shape
@@ -161,7 +162,7 @@ def Messung(breite_bild_gesamt_mm, bildlaengePX, bildbreitePX):
 
             # print index, " ", gpio, ": Höhe: ",hoehe
 
-            if (hoehe < hoehe_minimal):
+            if (hoehe > hoehe_obergrenze):
                 Anz_Sensoren_Fertig += 1
 
             stopTime = time.time()
@@ -169,7 +170,7 @@ def Messung(breite_bild_gesamt_mm, bildlaengePX, bildbreitePX):
             messpunkt = [index, messzeitpunkt, hoehe]
             messpunkte.append(messpunkt)  # Messpunkte in eine Liste einfügen
 
-        if (Anz_Sensoren_Fertig >= 4):
+        if (Anz_Sensoren_Fertig >= 2):
             print "fertig"
             messzeitraum_gesamt = stopTime - startTime
             break

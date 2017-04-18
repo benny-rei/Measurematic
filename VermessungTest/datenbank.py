@@ -10,7 +10,7 @@ Datenbank = 'ec_logisticsdb'
 def messung_eintragen(laenge, breite, hoehe):
     verbindung = verbindung_herstellen()
     cursor = verbindung.cursor()
-
+    
     print (laenge, breite, hoehe)
 
     sql_command = "INSERT INTO artikel (artikel_id,bezeichnung, " \

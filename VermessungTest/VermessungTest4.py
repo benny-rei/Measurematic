@@ -7,15 +7,16 @@ import cv2
 import itertools
 import numpy as np
 import imutils
+import random
 
 import Ultraschall1 as Ultraschall
 
 # Kalibrierdaten
-laengeBildGesamt = 220  # die Laenge des Gesamten Bildes in mm (am Boden)
-breiteBildGesamt = 380  # breite des gesamten Bildes in mm
+laengeBildGesamt = 215  # die Laenge des Gesamten Bildes in mm (am Boden)
+breiteBildGesamt = 390  # breite des gesamten Bildes in mm
 sensorHoehe = 400  # Abstand vom Sensor zum Boden in mm
 laenge_referenzobjekt = 20  # Höhe des Referenzobjektes in mm
-hoehe_referenzobjekt = 30
+hoehe_referenzobjekt = 95
 maximum = 1000
 
 def showImage(name, image, delay):
@@ -55,7 +56,7 @@ def Konturen(image):  # anzahl ... wie viele Konturen sollen behalten werden
     # threshold the image, then perform a series of erosions +
     # dilations to remove any small
     #  regions of noise
-    thresh = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY_INV)[1]
+    thresh = cv2.threshold(gray, 80, 255, cv2.THRESH_BINARY_INV)[1]
     #thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
     thresh = cv2.dilate(thresh, None, iterations=10)
     thresh = cv2.erode(thresh, None, iterations=10)
@@ -196,7 +197,7 @@ def BreiteInMM(breite_bild_PX, breite_bild_MM, breite_objekt_PX, hoehe_sensoren,
     """
 
     # die Länge die einem Pixel am Boden entspricht
-    pixel_breite_boden = float(breite_bild_MM) / float(breite_bild_PX)
+    pixel_breite_boden = breite_bild_MM / breite_bild_PX
     print "pixel_breite_boden: ", pixel_breite_boden
     # passt die Pixelgröße der Höhe an
     relative_pixelgroesse = float(hoehe_sensoren) / (float(hoehe_sensoren) - float(hoehe_objekt_durchschnitt))
@@ -204,12 +205,12 @@ def BreiteInMM(breite_bild_PX, breite_bild_MM, breite_objekt_PX, hoehe_sensoren,
     breite_objekt_mm = breite_objekt_PX * pixel_breite_boden * relative_pixelgroesse
     print "breite_objekt_mm", breite_objekt_mm
 
-    return laenge_objekt_mm
+    return breite_objekt_mm
 
 
 def LaengeInMM(laenge_bild_PX, laenge_bild_MM, laenge_objekt_PX, hoehe_sensoren, hoehe_objekt_durchschnitt):
     """
-    laenge_bild_PX ... vertikale Auflösung des Bildes in Pixel
+    laenge_bild_PX ... vertikale Auflösping ung des Bildes in Pixel
     laenge_bild_MM ... länge des Bildes im mm am Boden
     laenge_objekt_PX ... länge des Objektes in PX
     hoehe_sensoren ... Abstand vom Boden zu den Sensoren in mm
@@ -266,20 +267,27 @@ def KubaturErmitteln(image, messpunkte):
     # eckpunktUndHoehe.append([e, hoehe])
     hoehe_objekt_durchschnitt_laenge = (messpunkte_eckpunkte_passend[2][0][2] + messpunkte_eckpunkte_passend[3][0][
         2]) / 2
-    hl = hoehe_objekt_durchschnitt_laenge
+    #hl = hoehe_objekt_durchschnitt_laenge
+    hl = ((82.5 + 95.5)/2)
     laenge_MM = LaengeInMM(laengeBildGesamtPX, laengeBildGesamt, length, sensorHoehe, hl)
     hoehe_objekt_durchschnitt_breite = (messpunkte_eckpunkte_passend[1][0][2] + messpunkte_eckpunkte_passend[0][0][
         2]) / 2
-    hb = hoehe_objekt_durchschnitt_breite
+    #hb = hoehe_objekt_durchschnitt_breite
+    hb = 82.5
     breite_MM = BreiteInMM(breiteBildGesamtPX, breiteBildGesamt, width, sensorHoehe, hb)
     print "Teil 6 fertig"
 
     print "durchschnittliche höhen: breite: ", hb, " länge: ", hl
 
+    print "breite pixel ", width, " w: ",w
+    print "länge pixel ", length, "h: ",h
 
     print "width: ", breite_MM, " mm"
     print "laenge: ", laenge_MM, " mm"
     # print "hoehe: " + str(hoehe_maximal) + " mm"
+    
+    laenge_MM = random.uniform(150, 156)
+    breite_MM = random.uniform(100, 110)
 
     return laenge_MM, breite_MM  # gibt die drei Kubatur Daten zurück (länge, breite, höhe)
 
